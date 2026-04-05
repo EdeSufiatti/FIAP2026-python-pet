@@ -33,7 +33,6 @@ Este sistema implementa operações CRUD (Create, Read, Update, Delete) via term
 pet/
 ├── main.py
 ├── .env
-├── .env.example
 ├── .gitignore
 └── README.md
 
@@ -44,16 +43,60 @@ pet/
 Antes de rodar o projeto, você precisa ter instalado:
 
 - Python 3.12+
-- Oracle Database XE
+- Oracle Database XE (Windows)
 - Oracle SQL Developer
 
 ---
 
-## 🗄️ Configuração do banco de dados
+# 🧱 Instalação do Oracle Database XE (Windows)
 
-### Criar usuário no Oracle
+### 1. Download
 
-Execute no SQL Developer:
+Baixe o Oracle Database XE (Express Edition) no site oficial da Oracle:
+
+https://www.oracle.com/database/technologies/xe-downloads.html
+
+---
+
+### 2. Instalação
+
+Execute o instalador e siga os passos:
+
+- Defina uma senha para os usuários administrativos (SYSTEM/SYS)
+- Mantenha a porta padrão: **1521**
+- Aguarde a instalação concluir
+
+---
+
+### 3. Verificar instalação
+
+Após instalar, o Oracle já cria automaticamente:
+
+- Banco local ativo
+- Serviço padrão: **XEPDB1**
+
+Esse será o banco utilizado no projeto.
+
+---
+
+# 🔌 Configuração do SQL Developer
+
+1. Abra o SQL Developer
+2. Crie uma nova conexão com os seguintes dados:
+
+- Host: `127.0.0.1`
+- Porta: `1521`
+- Service name: `XEPDB1`
+- Usuário: `system`
+- Senha: (definida na instalação)
+
+3. Clique em **Testar** → **Conectar**
+
+---
+
+# 👤 Criar usuário no Oracle XE
+
+No SQL Developer, execute os comandos abaixo:
 
 ALTER SESSION SET CONTAINER = XEPDB1;
 
@@ -65,7 +108,9 @@ ALTER USER <seu_user_oracle> QUOTA UNLIMITED ON USERS;
 
 ---
 
-### Criar tabela
+# 🗄️ Criar tabela do projeto
+
+Conectado com o usuário criado, execute:
 
 CREATE TABLE petshop(
  id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -78,7 +123,7 @@ CREATE TABLE petshop(
 
 ## 🔐 Configuração do .env
 
-Crie um arquivo `.env` na raiz do projeto (NÃO versionar):
+Crie um arquivo `.env` na raiz do projeto (não versionar):
 
 DB_USER=<seu_user_oracle>
 DB_PASSWORD=<sua_senha_oracle>
@@ -119,7 +164,7 @@ python main.py
 
 - Nunca envie o arquivo `.env` para o Git
 - Adicione `.env` no `.gitignore`
-- Não exponha credenciais em código ou repositórios
+- Nunca exponha credenciais no código ou README
 
 ---
 
@@ -127,8 +172,8 @@ python main.py
 
 Erro de conexão:
 - Verifique variáveis no `.env`
-- Verifique se o Oracle está ativo
-- Confirme uso de 127.0.0.1:1521/XEPDB1
+- Verifique se o Oracle está rodando
+- Confirme o uso de `127.0.0.1:1521/XEPDB1`
 
 Tabela não encontrada:
 - Execute o script de criação da tabela
